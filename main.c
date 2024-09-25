@@ -13,7 +13,7 @@ int	main(void)
 		perror("Error abriendo archivo");
 		return (1);
 	}
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
 		// Llama a get_next_line en un bucle
 	{
 		printf("%s", line); // Imprime la línea leída
@@ -22,3 +22,6 @@ int	main(void)
 	close(fd); // Cierra el archivo
 	return (0);
 }
+/*cc -Wall -Werror -Wextra -D BUFFER_SIZE=2 get_next_line.c get_next_line_utils.c
+main.c -o gnl_test
+./gnl_test*/

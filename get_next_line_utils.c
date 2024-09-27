@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madel-va <madel-va@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:33:45 by madel-va          #+#    #+#             */
-/*   Updated: 2024/09/25 12:20:52 by madel-va         ###   ########.fr       */
+/*   Updated: 2024/09/25 20:31:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,35 +53,4 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)s);
 	else
 		return (NULL);
-}
-
-char	*update_buffer(char *buffer)
-{
-	char	*new_buffer;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	// Busca el carácter de nueva línea
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	// Si no hay nueva línea, liberar el buffer
-	if (!buffer[i])
-	{
-		free(buffer);
-		return (NULL);
-	}
-	// Crea un nuevo buffer que contenga lo que queda después de la nueva línea
-	new_buffer = malloc(sizeof(char) * (ft_strlen(buffer) - i));
-	if (!new_buffer)
-		return (NULL);
-	// Copia el contenido del buffer después de la nueva línea
-	i++; // Moverse al siguiente carácter después de '\n'
-	while (buffer[i])
-		new_buffer[j++] = buffer[i++];
-	new_buffer[j] = '\0';
-	// Libera el buffer viejo
-	free(buffer);
-	return (new_buffer);
 }

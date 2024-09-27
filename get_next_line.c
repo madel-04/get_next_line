@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:34:06 by madel-va          #+#    #+#             */
-/*   Updated: 2024/09/25 20:04:39 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/27 17:44:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,13 @@ static char	*ft_read_to_buffer(int fd, char *buffer)
 	while (!ft_strchr(buffer, '\n'))
 	{
 		bytes_read = read(fd, temp, BUFFER_SIZE);
-		if (bytes_read <= 0)
-			break ;
+		if (bytes_read < 0)
+		{
+			free(buffer);
+			return (NULL);
+		}
+		if (bytes_read == 0)
+			return (NULL); ;
 		temp[bytes_read] = '\0';
 		buffer = ft_strjoin(buffer, temp);
 		if (!buffer)
@@ -93,39 +98,17 @@ char	*get_next_line(int fd)
 	static char	*buffer;
 	char		*line;
 	
-	buffer = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = ft_read_to_buffer(fd, buffer);
 	if (!buffer)
 		return (NULL);
 	line = ft_extract_line(buffer);
+	if (!line)
+	{
+		free(buffer);
+		return (NULL);
+	}
 	buffer = ft_trim_buffer(buffer);
 	return (line);
 }
-/*char	*get_next_line(int fd)
-{
-	static char	*buffer;
-	char		*line;
-	int			bytes_read;
-	char		temp[BUFFER_SIZE + 1];
-
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	if (!buffer)
-		buffer = malloc(1);
-	while (!ft_strchr(buffer, '\n'))
-	{
-		bytes_read = read(fd, temp, BUFFER_SIZE);
-		if (bytes_read <= 0)
-			break ;
-		temp[bytes_read] = '\0';
-		buffer = ft_strjoin(buffer, temp);
-	}
-	if (bytes_read < 0)
-		return (NULL);
-	line = extract_line(buffer);
-	buffer = update_buffer(buffer);
-	return (line);
-}
-*/

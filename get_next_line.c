@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madel-va <madel-va@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:34:06 by madel-va          #+#    #+#             */
-/*   Updated: 2024/09/27 17:44:13 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/30 11:52:59 by madel-va         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,26 @@ static char	*ft_trim_buffer(char *buffer)
 	return (new_buffer);
 }
 /*Buffer nuevo sin la linea*/
+// Inicializar buffer vacío si es NULL
 
-static char	*ft_read_to_buffer(int fd, char *buffer)
+static char	*ft_trybuffer(char *buffer)
 {
-	char	temp[BUFFER_SIZE + 1];
-	int		bytes_read;
-
-	if (!buffer) // Inicializar buffer vacío si es NULL
+	if (!buffer)
 	{
 		buffer = (char *)malloc(1);
 		if (!buffer)
 			return (NULL);
 		buffer[0] = '\0';
 	}
+	return (buffer);
+}
+
+static char	*ft_read_to_buffer(int fd, char *buffer)
+{
+	char	temp[BUFFER_SIZE + 1];
+	int		bytes_read;
+
+	buffer = ft_trybuffer(buffer);
 	while (!ft_strchr(buffer, '\n'))
 	{
 		bytes_read = read(fd, temp, BUFFER_SIZE);
@@ -84,7 +91,7 @@ static char	*ft_read_to_buffer(int fd, char *buffer)
 			return (NULL);
 		}
 		if (bytes_read == 0)
-			return (NULL); ;
+			return (NULL);
 		temp[bytes_read] = '\0';
 		buffer = ft_strjoin(buffer, temp);
 		if (!buffer)
@@ -97,7 +104,7 @@ char	*get_next_line(int fd)
 {
 	static char	*buffer;
 	char		*line;
-	
+
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = ft_read_to_buffer(fd, buffer);

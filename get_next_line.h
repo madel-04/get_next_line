@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madel-va <madel-va@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:33:26 by madel-va          #+#    #+#             */
-/*   Updated: 2024/09/25 12:19:12 by madel-va         ###   ########.fr       */
+/*   Updated: 2024/10/09 23:06:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ char	*ft_strjoin(char const *s1, char const *s2);
 int		ft_strlen(const char *str);
 char	*get_next_line(int fd);
 char	*ft_strchr(const char *s, int c);
-char	*update_buffer(char *buffer);
+char	*ft_extract_line(char *buffer);
 
 #endif

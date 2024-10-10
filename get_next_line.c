@@ -5,36 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/25 11:34:06 by madel-va          #+#    #+#             */
-/*   Updated: 2024/09/27 17:44:13 by marvin           ###   ########.fr       */
+/*   Created: 2024/10/09 20:45:09 by marvin            #+#    #+#             */
+/*   Updated: 2024/10/10 10:27:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-static char	*ft_extract_line(char *buffer)
-{
-	int		i;
-	int		j;
-	char	*line;
-
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	line = (char *)malloc(i + 2);
-	if (!line)
-		return (NULL);
-	j = 0;
-	while (j < i)
-	{
-		line[j] = buffer[j];
-		j++;
-	}
-	if (buffer[i] == '\n')
-		line[i++] = '\n';
-	line[i] = '\0';
-	return (line);
-}
 
 static char	*ft_trim_buffer(char *buffer)
 {
@@ -61,54 +37,72 @@ static char	*ft_trim_buffer(char *buffer)
 	free(buffer);
 	return (new_buffer);
 }
-/*Buffer nuevo sin la linea*/
 
-static char	*ft_read_to_buffer(int fd, char *buffer)
+static char	*ft_join_and_free(char *buffer, char *temp)
 {
-	char	temp[BUFFER_SIZE + 1];
-	int		bytes_read;
+	char	*new_buffer;
 
-	if (!buffer) // Inicializar buffer vacío si es NULL
+	new_buffer = ft_strjoin(buffer, temp);
+	if (!new_buffer)
+	{
+		free(buffer);
+		return (NULL);
+	}
+	free(buffer);
+	return (new_buffer);
+}
+
+static char	*ft_trybuffer(char *buffer)
+{
+	if (!buffer)
 	{
 		buffer = (char *)malloc(1);
 		if (!buffer)
 			return (NULL);
 		buffer[0] = '\0';
 	}
+	return (buffer);
+}
+
+static char	*ft_read_to_buffer(int fd, char *buffer)
+{
+	char	*temp;
+	int		bytes_read;
+
+	temp = (char *)malloc(BUFFER_SIZE + 1);
+	if (!temp)
+		return (NULL);
+	buffer = ft_trybuffer(buffer);
 	while (!ft_strchr(buffer, '\n'))
 	{
 		bytes_read = read(fd, temp, BUFFER_SIZE);
 		if (bytes_read < 0)
-		{
-			free(buffer);
-			return (NULL);
-		}
+			return (free(temp), free(buffer), NULL);
 		if (bytes_read == 0)
-			return (NULL); ;
+			return (free(temp), buffer);
 		temp[bytes_read] = '\0';
-		buffer = ft_strjoin(buffer, temp);
+		buffer = ft_join_and_free(buffer, temp);
 		if (!buffer)
-			return (NULL);
+			return (free(temp), NULL);
 	}
-	return (buffer);
+	return (free(temp), buffer);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer = NULL;
 	char		*line;
-	
+
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = ft_read_to_buffer(fd, buffer);
-	if (!buffer)
-		return (NULL);
-	line = ft_extract_line(buffer);
-	if (!line)
+	if (!buffer || *buffer == '\0')
 	{
 		free(buffer);
+		buffer = NULL;
 		return (NULL);
 	}
+	line = ft_extract_line(buffer);
 	buffer = ft_trim_buffer(buffer);
 	return (line);
 }

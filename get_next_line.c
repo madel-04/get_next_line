@@ -3,10 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: madel-va <madel-va@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+<<<<<<< HEAD
 /*   Created: 2024/10/09 20:45:09 by marvin            #+#    #+#             */
 /*   Updated: 2024/10/10 10:27:40 by marvin           ###   ########.fr       */
+=======
+/*   Created: 2024/09/25 11:34:06 by madel-va          #+#    #+#             */
+/*   Updated: 2024/09/30 11:52:59 by madel-va         ###   ########.fr       */
+>>>>>>> 020313595f3e95a8cd68d8d50673dcf93e24eafd
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +42,7 @@ static char	*ft_trim_buffer(char *buffer)
 	free(buffer);
 	return (new_buffer);
 }
+<<<<<<< HEAD
 
 static char	*ft_join_and_free(char *buffer, char *temp)
 {
@@ -54,6 +60,13 @@ static char	*ft_join_and_free(char *buffer, char *temp)
 
 static char	*ft_trybuffer(char *buffer)
 {
+=======
+/*Buffer nuevo sin la linea*/
+// Inicializar buffer vacío si es NULL
+
+static char	*ft_trybuffer(char *buffer)
+{
+>>>>>>> 020313595f3e95a8cd68d8d50673dcf93e24eafd
 	if (!buffer)
 	{
 		buffer = (char *)malloc(1);
@@ -66,12 +79,18 @@ static char	*ft_trybuffer(char *buffer)
 
 static char	*ft_read_to_buffer(int fd, char *buffer)
 {
+<<<<<<< HEAD
 	char	*temp;
 	int		bytes_read;
 
 	temp = (char *)malloc(BUFFER_SIZE + 1);
 	if (!temp)
 		return (NULL);
+=======
+	char	temp[BUFFER_SIZE + 1];
+	int		bytes_read;
+
+>>>>>>> 020313595f3e95a8cd68d8d50673dcf93e24eafd
 	buffer = ft_trybuffer(buffer);
 	while (!ft_strchr(buffer, '\n'))
 	{
@@ -79,7 +98,11 @@ static char	*ft_read_to_buffer(int fd, char *buffer)
 		if (bytes_read < 0)
 			return (free(temp), free(buffer), NULL);
 		if (bytes_read == 0)
+<<<<<<< HEAD
 			return (free(temp), buffer);
+=======
+			return (NULL);
+>>>>>>> 020313595f3e95a8cd68d8d50673dcf93e24eafd
 		temp[bytes_read] = '\0';
 		buffer = ft_join_and_free(buffer, temp);
 		if (!buffer)
